@@ -7,6 +7,7 @@
     android:background="@drawable/background"
     tools:context=".Dashboard">>
 
+
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="60dp"
@@ -64,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:background="@drawable/button_orange_bg"
                 android:backgroundTint="@color/orange"
                 android:text="Crear pedido"
                 android:textColor="@android:color/white" />
@@ -75,6 +77,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/orange"
+                android:background="@drawable/button_orange_bg"
                 android:text="Ver mis pedidos"
                 android:textColor="@android:color/white" />
 
@@ -85,6 +88,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:backgroundTint="@color/orange"
+                android:background="@drawable/button_orange_bg"
                 android:text="Mis entregas"
                 android:textColor="@android:color/white" />
 

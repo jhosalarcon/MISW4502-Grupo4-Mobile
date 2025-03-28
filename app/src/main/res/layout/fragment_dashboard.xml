@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background"
-    tools:context=".Dashboard">
+    tools:context=".Dashboard">>
 
     <ImageButton
         android:id="@+id/btnBack"
@@ -19,59 +19,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnPerfil"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@drawable/planet1"
-        android:text="Mi perfil"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="60dp" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="40dp"
+        android:background="@android:color/white"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btnHistorial"
-        android:layout_width="235dp"
-        android:layout_height="235dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginStart="170dp"
-        android:background="@drawable/planet2"
-        android:text="Historial\nalarmas"
-        android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="40dp">
 
-    <Button
-        android:id="@+id/btnAlarmasActivas"
-        android:layout_width="240dp"
-        android:layout_height="230dp"
-        android:background="@drawable/planet3"
-        android:text="Alarmas\nactivas"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_marginStart="-20dp"
-        android:layout_marginTop="260dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Bienvenido Cliente"
+                android:textColor="@android:color/black"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnRecompensas"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:background="@drawable/planet4"
-        android:text="Recompensas"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="390dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="¿Qué deseas hacer hoy?"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/btnCrearAlarma"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="290dp"
-        android:layout_marginTop="625dp"
-        android:background="@drawable/circular_button_small_white"
-        android:text="+"
-        android:textColor="@android:color/black"
-        android:textSize="25sp" />
+            <Button
+                android:id="@+id/btnCrearPedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/orange"
+                android:text="Crear pedido"
+                android:textColor="@android:color/white" />
 
-</FrameLayout>
+            <Button
+                android:id="@+id/btnVerPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/orange"
+                android:text="Ver mis pedidos"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnEntregas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/orange"
+                android:text="Mis entregas"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

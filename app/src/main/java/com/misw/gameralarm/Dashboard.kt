@@ -37,31 +37,22 @@ class Dashboard : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
-        val btnPerfil: Button = view.findViewById(R.id.btnPerfil)
-        val btnHistorial: Button = view.findViewById(R.id.btnHistorial)
-        val btnAlarmasActivas: Button = view.findViewById(R.id.btnAlarmasActivas)
-        val btnRecompensas: Button = view.findViewById(R.id.btnRecompensas)
-        val btnCrearAlarma: Button = view.findViewById(R.id.btnCrearAlarma)
+        val btnCrearPedido: Button = view.findViewById(R.id.btnCrearPedido)
+        val btnVerPedidos: Button = view.findViewById(R.id.btnVerPedidos)
+        val btnEntregas: Button = view.findViewById(R.id.btnEntregas)
 
-        btnRecompensas.setOnClickListener {
+        btnCrearPedido.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_recompensas)
         }
 
-        btnHistorial.setOnClickListener {
+        btnVerPedidos.setOnClickListener {
             showPopup("Historial alarmas", "Esta funcionalidad no está en el alcance")
         }
 
-        btnCrearAlarma.setOnClickListener {
+        btnEntregas.setOnClickListener {
             showPopup("Crear alarma", "Esta funcionalidad no está en el alcance")
         }
 
-        btnAlarmasActivas.setOnClickListener {
-            showPopup("Alarmas activas", "Esta funcionalidad no está en el alcance")
-        }
-
-        btnPerfil.setOnClickListener {
-            showPopup("Mi perfil", "Esta funcionalidad no está en el alcance")
-        }
 
         val btnBack: ImageButton = view.findViewById(R.id.btnBack)
 

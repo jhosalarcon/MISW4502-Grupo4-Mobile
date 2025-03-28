@@ -7,6 +7,18 @@
     android:background="@drawable/background"
     tools:context=".CrearCuenta">
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Atrás"
+        android:src="@drawable/arrow_back_24px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/loginContainer"
         android:layout_width="0dp"
@@ -26,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Crear cuenta"
-            android:textSize="20sp"
+            android:textSize="34sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_gravity="center_horizontal"

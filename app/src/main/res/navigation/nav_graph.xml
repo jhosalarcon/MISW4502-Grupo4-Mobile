@@ -10,6 +10,11 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/crear_cuenta"
+        android:name="com.misw.gameralarm.CrearCuenta"
+        tools:layout="@layout/fragment_crear_cuenta" />
+
+    <fragment
         android:id="@+id/dashboard"
         android:name="com.misw.gameralarm.Dashboard"
         tools:layout="@layout/fragment_home" />
@@ -27,6 +32,10 @@
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />
+
+    <action
+        android:id="@+id/action_home_to_crear_cuenta"
+        app:destination="@id/crear_cuenta" />
 
     <action
         android:id="@+id/action_dashboard_to_recompensas"

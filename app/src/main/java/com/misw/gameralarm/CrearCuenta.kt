@@ -18,28 +18,22 @@ class CrearCuenta : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_crear_cuenta, container, false)
 
+        val etNombre: EditText = view.findViewById(R.id.etNombre)
+        val etTelefono: EditText = view.findViewById(R.id.etTelefono)
         val etEmail: EditText = view.findViewById(R.id.etEmail)
         val etPassword: EditText = view.findViewById(R.id.etPassword)
-        val btnLogin: Button = view.findViewById(R.id.btnLogin)
         val btnCreateAccount: Button = view.findViewById(R.id.btnCreateAccount)
-        val tvForgotPassword: TextView = view.findViewById(R.id.tvForgotPassword)
-
-        btnLogin.setOnClickListener {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                findNavController().navigate(R.id.action_home_to_dashboard)
-            } else {
-                showErrorDialog("Debe ingresar usuario y contraseña")
-            }
-        }
 
         btnCreateAccount.setOnClickListener {
-            showPopup()
-        }
-
-        tvForgotPassword.setOnClickListener {
-            showErrorDialog("Funcionalidad no implementada")
+            val nombre = etNombre.text.toString()
+            val telefono = etTelefono.text.toString()
+            val email = etEmail.text.toString()
+            val password = etPassword.text.toString()
+            if (email.isNotEmpty() && password.isNotEmpty() && nombre.isNotEmpty() && telefono.isNotEmpty()) {
+                findNavController().navigate(R.id.action_home_to_dashboard)
+            } else {
+                showErrorDialog("Debe ingresar todos los campos")
+            }
         }
 
         return view

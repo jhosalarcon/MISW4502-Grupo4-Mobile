@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/home">
+
+    <fragment
+        android:id="@+id/home"
+        android:name="com.misw.gameralarm.Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/crear_cuenta"
+        android:name="com.misw.gameralarm.CrearCuenta"
+        tools:layout="@layout/fragment_crear_cuenta" />
+
+    <fragment
+        android:id="@+id/dashboard"
+        android:name="com.misw.gameralarm.Dashboard"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/recompensas"
+        android:name="com.misw.gameralarm.Recompensas"
+        tools:layout="@layout/fragment_recompensas" />
+
+    <fragment
+        android:id="@+id/reclamarRecompensas"
+        android:name="com.misw.gameralarm.ReclamarRecompensas"
+        tools:layout="@layout/fragment_reclamar_recompensas" />
+
+    <action
+        android:id="@+id/action_home_to_dashboard"
+        app:destination="@id/dashboard" />
+
+    <action
+        android:id="@+id/action_home_to_crear_cuenta"
+        app:destination="@id/crear_cuenta" />
+
+    <action
+        android:id="@+id/action_dashboard_to_recompensas"
+        app:destination="@id/recompensas" />
+        
+    <action
+        android:id="@+id/action_recompensas_to_reclamar"
+        app:destination="@id/reclamarRecompensas" />
+</navigation>

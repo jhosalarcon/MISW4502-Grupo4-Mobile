@@ -13,6 +13,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_home_to_crear_cuenta">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_home_to_dashboard">
                     <value>
                       <LayoutPositions />
@@ -23,7 +28,7 @@
                       <LayoutPositions />
                     </value>
                   </entry>
-                  <entry key="c">
+                  <entry key="crear_cuenta">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

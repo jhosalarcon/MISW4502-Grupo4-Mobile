@@ -11,7 +11,7 @@
 
     <fragment
         android:id="@+id/crear_cuenta"
-        android:name="com.misw.gameralarm.CrearCuenta"
+        android:name="com.misw.gameralarm.ui.auth.CrearCuenta"
         tools:layout="@layout/fragment_crear_cuenta" />
 
     <fragment

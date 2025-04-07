@@ -6,12 +6,12 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.misw.gameralarm.Home"
+        android:name="com.misw.gameralarm.Login"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/crear_cuenta"
-        android:name="com.misw.gameralarm.CrearCuenta"
+        android:name="com.misw.gameralarm.ui.auth.CrearCuenta"
         tools:layout="@layout/fragment_crear_cuenta" />
 
     <fragment

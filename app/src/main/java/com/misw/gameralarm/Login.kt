@@ -10,8 +10,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.misw.gameralarm.data.model.LoginRequest
+import com.misw.gameralarm.data.model.LoginResponse
+import com.misw.gameralarm.network.ApiClient
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class Home : Fragment() {
+class Login : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,8 +34,32 @@ class Home : Fragment() {
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
+
             if (email.isNotEmpty() && password.isNotEmpty()) {
-                findNavController().navigate(R.id.action_home_to_dashboard)
+                val request = LoginRequest(email, password)
+
+                ApiClient.apiService.loginUser(request).enqueue(object : Callback<LoginResponse> {
+                    override fun onResponse(
+                        call: Call<LoginResponse>,
+                        response: Response<LoginResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            findNavController().navigate(R.id.action_home_to_dashboard)
+                        } else {
+                            val errorMessage = try {
+                                val jsonObj = JSONObject(response.errorBody()?.string() ?: "")
+                                jsonObj.getString("error")
+                            } catch (e: Exception) {
+                                "Error desconocido"
+                            }
+                            showErrorDialog("Inicio de sesión fallido: $errorMessage")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                        showErrorDialog("Error de red: ${t.message}")
+                    }
+                })
             } else {
                 showErrorDialog("Debe ingresar usuario y contraseña")
             }
@@ -43,14 +74,6 @@ class Home : Fragment() {
         }
 
         return view
-    }
-
-    private fun showPopup() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Crear cuenta")
-        builder.setMessage("Esta funcionalidad no está en el alcance")
-        builder.setPositiveButton("Cerrar") { dialog, _ -> dialog.dismiss() }
-        builder.create().show()
     }
 
     private fun showErrorDialog(message: String) {

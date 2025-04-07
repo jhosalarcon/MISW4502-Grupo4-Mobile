@@ -1,4 +1,4 @@
-package com.misw.gameralarm
+package com.misw.gameralarm.ui.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.misw.gameralarm.R
+import com.misw.gameralarm.data.model.CrearCuentaRequest
+import com.misw.gameralarm.data.model.CrearCuentaResponse
+import com.misw.gameralarm.network.ApiClient
+import org.json.JSONObject
 
 class CrearCuenta : Fragment() {
     override fun onCreateView(
@@ -31,7 +35,31 @@ class CrearCuenta : Fragment() {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty() && nombre.isNotEmpty() && telefono.isNotEmpty()) {
-                findNavController().navigate(R.id.action_home_to_dashboard)
+                val request = CrearCuentaRequest(nombre, telefono, email, password)
+
+                ApiClient.apiService.registerUser(request).enqueue(object : retrofit2.Callback<CrearCuentaResponse> {
+                    override fun onResponse(
+                        call: retrofit2.Call<CrearCuentaResponse>,
+                        response: retrofit2.Response<CrearCuentaResponse>
+                    ) {
+                        if (response.isSuccessful && response.code() == 201) {
+                            findNavController().navigate(R.id.action_home_to_dashboard)
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            val errorMessage = try {
+                                val json = JSONObject(errorBody ?: "")
+                                json.getString("error")
+                            } catch (e: Exception) {
+                                "Registro fallido"
+                            }
+                            showErrorDialog(errorMessage)
+                        }
+                    }
+
+                    override fun onFailure(call: retrofit2.Call<CrearCuentaResponse>, t: Throwable) {
+                        showErrorDialog("Error de red: ${t.message}")
+                    }
+                })
             } else {
                 showErrorDialog("Debe ingresar todos los campos")
             }
@@ -44,14 +72,6 @@ class CrearCuenta : Fragment() {
         }
 
         return view
-    }
-
-    private fun showPopup() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Crear cuenta")
-        builder.setMessage("Esta funcionalidad no está en el alcance")
-        builder.setPositiveButton("Cerrar") { dialog, _ -> dialog.dismiss() }
-        builder.create().show()
     }
 
     private fun showErrorDialog(message: String) {

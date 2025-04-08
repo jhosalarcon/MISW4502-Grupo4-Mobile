@@ -23,9 +23,26 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_nuevo_pedido_to_agregar_nuevo_item">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_recompensas_to_reclamar">
                     <value>
                       <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="agregar_item">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
                     </value>
                   </entry>
                   <entry key="crear_cuenta">
@@ -52,6 +69,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="detallePedido">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="home">
                     <value>
                       <LayoutPositions>
@@ -60,6 +89,27 @@
                             <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="misPedidos">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_misPedidos_to_detallePedido">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
                         </option>
                       </LayoutPositions>
                     </value>

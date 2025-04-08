@@ -34,6 +34,15 @@
         android:name="com.misw.gameralarm.ReclamarRecompensas"
         tools:layout="@layout/fragment_reclamar_recompensas" />
 
+    <fragment
+        android:id="@+id/mis_pedidos"
+        android:name="com.misw.gameralarm.MisPedidos"
+        tools:layout="@layout/fragment_mis_pedidos" />
+    <fragment
+        android:id="@+id/detallePedido"
+        android:name="com.misw.gameralarm.DetallePedido"
+        tools:layout="@layout/fragment_detalle_pedido" />
+
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />
@@ -49,8 +58,26 @@
     <action
         android:id="@+id/action_nuevo_pedido_to_agregar_nuevo_item"
         app:destination="@id/agregar_item" />
-        
+
+    <action
+        android:id="@+id/action_dashboard_to_mis_pedidos"
+        app:destination="@id/mis_pedidos" />
+
     <action
         android:id="@+id/action_recompensas_to_reclamar"
         app:destination="@id/reclamarRecompensas" />
+
+    <fragment
+        android:id="@+id/misPedidos"
+        android:name="com.misw.gameralarm.MisPedidos"
+        android:label="Mis Pedidos">
+
+        <action
+            android:id="@+id/action_misPedidos_to_detallePedido"
+            app:destination="@id/detallePedido" >
+            <argument
+                android:name="orderId"
+                app:argType="string" />
+        </action>
+    </fragment>
 </navigation>

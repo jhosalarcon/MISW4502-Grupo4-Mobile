@@ -8,6 +8,11 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="action_dashboard_to_mis_pedidos">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_dashboard_to_nuevo_pedido">
                     <value>
                       <LayoutPositions />
@@ -82,6 +87,18 @@
                     </value>
                   </entry>
                   <entry key="home">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="m">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

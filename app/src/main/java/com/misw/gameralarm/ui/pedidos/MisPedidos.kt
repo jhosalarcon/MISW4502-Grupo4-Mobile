@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -41,6 +42,11 @@ class MisPedidos : Fragment() {
                     findNavController().navigate(R.id.action_misPedidos_to_detallePedido, bundle)
                 }
             }
+        }
+        val btnBack: ImageButton = view.findViewById(R.id.btnBack)
+
+        btnBack.setOnClickListener {
+            findNavController().navigateUp()
         }
 
         return view

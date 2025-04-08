@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/agregar_item"
-        android:name="com.misw.gameralarm.AgregarItem"
+        android:name="com.misw.gameralarm.ui.items.AgregarItem"
         tools:layout="@layout/fragment_agregar_nuevo_item" />
 
     <fragment

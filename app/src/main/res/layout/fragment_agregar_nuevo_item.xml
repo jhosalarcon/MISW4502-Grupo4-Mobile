@@ -37,8 +37,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Agregar nuevo item"
-            android:textSize="30sp"
+            android:text="Agregar nuevo producto"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/black"
             android:layout_gravity="center_horizontal"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nombre del item"
+            android:text="Nombre"
             android:textSize="16sp"
             android:textColor="@android:color/black" />
 
@@ -57,6 +57,35 @@
             android:layout_height="wrap_content"
             android:hint="-"
             android:inputType="textPersonName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción"
+            android:textSize="16sp"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/etDescripcionItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="-"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precio"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="$0.00" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,48 +126,34 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Inventario"
+                    android:text="Tipo"
                     android:textSize="16sp"
                     android:textColor="@android:color/black" />
 
                 <EditText
-                    android:id="@+id/etInventario"
-                    android:layout_width="match_parent"
+                    android:id="@+id/etTipo"
                     android:hint="-"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number" />
+                    android:inputType="text" />
+
             </LinearLayout>
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Precio"
+            android:text="Ubicación"
             android:textSize="16sp"
             android:textColor="@android:color/black"
             android:layout_marginTop="16dp" />
 
         <EditText
-            android:id="@+id/etPrecio"
+            android:id="@+id/etUbicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:hint="$0.00" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Comentarios"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/etComentarios"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Agregue un comentario"
-            android:inputType="text" />
+            android:inputType="text"
+            android:hint="-" />
 
         <Button
             android:id="@+id/btnGuardar"

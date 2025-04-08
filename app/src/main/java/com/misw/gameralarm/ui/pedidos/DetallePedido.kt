@@ -40,9 +40,7 @@ class DetallePedido : Fragment() {
 
         val etNombreItem: EditText = view.findViewById(R.id.etNombreItem)
         val etCantidad: EditText = view.findViewById(R.id.etCantidad)
-        val etInventario: EditText = view.findViewById(R.id.etInventario)
         val etPrecio: EditText = view.findViewById(R.id.etPrecio)
-        val etComentarios: EditText = view.findViewById(R.id.etComentarios)
         val btnGuardar: Button = view.findViewById(R.id.btnGuardar)
 
         val btnBack: ImageButton = view.findViewById(R.id.btnBack)
@@ -54,16 +52,13 @@ class DetallePedido : Fragment() {
         btnGuardar.setOnClickListener {
             val nombre = etNombreItem.text.toString()
             val cantidad = etCantidad.text.toString()
-            val inventario = etInventario.text.toString()
             val precio = etPrecio.text.toString()
-            val comentarios = etComentarios.text.toString()
+
 
             showPopup("Item guardado", """
                 Nombre: $nombre
-                Cantidad: $cantidad
-                Inventario: $inventario
+                Cantidad: $cantidad  
                 Precio: $precio
-                Comentarios: $comentarios
             """.trimIndent())
         }
 

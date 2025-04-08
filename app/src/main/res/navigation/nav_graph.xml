@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/home"
         android:name="com.misw.gameralarm.Login"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_login" />
 
     <fragment
         android:id="@+id/crear_cuenta"
@@ -17,12 +17,17 @@
     <fragment
         android:id="@+id/dashboard"
         android:name="com.misw.gameralarm.Dashboard"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/nuevo_pedido"
         android:name="com.misw.gameralarm.NuevoPedido"
         tools:layout="@layout/fragment_nuevo_pedido" />
+
+    <fragment
+        android:id="@+id/agregar_item"
+        android:name="com.misw.gameralarm.AgregarItem"
+        tools:layout="@layout/fragment_agregar_nuevo_item" />
 
     <fragment
         android:id="@+id/reclamarRecompensas"
@@ -40,6 +45,10 @@
     <action
         android:id="@+id/action_dashboard_to_nuevo_pedido"
         app:destination="@id/nuevo_pedido" />
+
+    <action
+        android:id="@+id/action_nuevo_pedido_to_agregar_nuevo_item"
+        app:destination="@id/agregar_item" />
         
     <action
         android:id="@+id/action_recompensas_to_reclamar"

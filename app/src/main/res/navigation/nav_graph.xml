@@ -20,9 +20,9 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/recompensas"
-        android:name="com.misw.gameralarm.Recompensas"
-        tools:layout="@layout/fragment_recompensas" />
+        android:id="@+id/nuevo_pedido"
+        android:name="com.misw.gameralarm.NuevoPedido"
+        tools:layout="@layout/fragment_nuevo_pedido" />
 
     <fragment
         android:id="@+id/reclamarRecompensas"
@@ -38,8 +38,8 @@
         app:destination="@id/crear_cuenta" />
 
     <action
-        android:id="@+id/action_dashboard_to_recompensas"
-        app:destination="@id/recompensas" />
+        android:id="@+id/action_dashboard_to_nuevo_pedido"
+        app:destination="@id/nuevo_pedido" />
         
     <action
         android:id="@+id/action_recompensas_to_reclamar"

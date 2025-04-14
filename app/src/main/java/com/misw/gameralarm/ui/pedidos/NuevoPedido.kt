@@ -18,7 +18,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Dashboard.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Dashboard : Fragment() {
+class NuevoPedido : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -35,24 +35,18 @@ class Dashboard : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val view = inflater.inflate(R.layout.fragment_nuevo_pedido, container, false)
 
+        val btnNuevoItem: Button = view.findViewById(R.id.btnNuevoItem)
         val btnCrearPedido: Button = view.findViewById(R.id.btnCrearPedido)
-        val btnVerPedidos: Button = view.findViewById(R.id.btnVerPedidos)
-        val btnEntregas: Button = view.findViewById(R.id.btnEntregas)
+
+        btnNuevoItem.setOnClickListener {
+            findNavController().navigate(R.id.action_nuevo_pedido_to_agregar_nuevo_item)
+        }
 
         btnCrearPedido.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_nuevo_pedido)
+            showPopup("Historial alarmas", "Esta funcionalidad no está en el alcance")
         }
-
-        btnVerPedidos.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
-        }
-
-        btnEntregas.setOnClickListener {
-            showPopup("Crear alarma", "Esta funcionalidad no está en el alcance")
-        }
-
 
         val btnBack: ImageButton = view.findViewById(R.id.btnBack)
 

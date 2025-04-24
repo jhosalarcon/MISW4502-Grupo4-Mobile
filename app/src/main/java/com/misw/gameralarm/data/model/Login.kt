@@ -6,7 +6,9 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val message: String? = null,
+    val id: Int,
+    val nombre: String,
+    val rol: String,
     val token: String
 
 )

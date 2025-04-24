@@ -6,8 +6,10 @@ import com.misw.gameralarm.data.model.LoginRequest
 import com.misw.gameralarm.data.model.LoginResponse
 import com.misw.gameralarm.data.model.NuevoProductoRequest
 import com.misw.gameralarm.data.model.NuevoProductoResponse
+import com.misw.gameralarm.data.model.PedidoResponse
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
@@ -19,4 +21,7 @@ interface ApiService {
 
     @POST("inventary/products")
     fun agregarProducto(@Body request: NuevoProductoRequest): Call<NuevoProductoResponse>
+
+    @GET("sales/sales")
+    fun listarPedidos(): Call<List<PedidoResponse>>
 }

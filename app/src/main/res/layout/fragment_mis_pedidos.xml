@@ -44,7 +44,6 @@
                 android:orientation="vertical"
                 android:padding="14dp">
 
-                <!-- Botón cerrar -->
                 <ImageView
                     android:id="@+id/closeButton"
                     android:layout_width="24dp"
@@ -53,7 +52,6 @@
                     android:contentDescription="Cerrar"
                     android:src="@drawable/ic_close" />
 
-                <!-- Título -->
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"

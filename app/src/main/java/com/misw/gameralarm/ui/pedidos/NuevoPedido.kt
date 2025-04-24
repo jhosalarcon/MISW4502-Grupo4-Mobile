@@ -38,15 +38,11 @@ class NuevoPedido : Fragment() {
         val view = inflater.inflate(R.layout.fragment_nuevo_pedido, container, false)
 
         val btnNuevoItem: Button = view.findViewById(R.id.btnNuevoItem)
-        val btnCrearPedido: Button = view.findViewById(R.id.btnCrearPedido)
 
         btnNuevoItem.setOnClickListener {
             findNavController().navigate(R.id.action_nuevo_pedido_to_agregar_nuevo_item)
         }
 
-        btnCrearPedido.setOnClickListener {
-            showPopup("Historial alarmas", "Esta funcionalidad no está en el alcance")
-        }
 
         val btnBack: ImageButton = view.findViewById(R.id.btnBack)
 

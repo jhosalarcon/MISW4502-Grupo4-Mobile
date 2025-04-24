@@ -50,7 +50,7 @@ class Dashboard : Fragment() {
         }
 
         btnEntregas.setOnClickListener {
-            showPopup("Crear alarma", "Esta funcionalidad no está en el alcance")
+            findNavController().navigate(R.id.action_dashboard_to_mis_entregas)
         }
 
 

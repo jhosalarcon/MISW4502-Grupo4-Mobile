@@ -44,7 +44,18 @@ class Login : Fragment() {
                         response: Response<LoginResponse>
                     ) {
                         if (response.isSuccessful) {
-                            findNavController().navigate(R.id.action_home_to_dashboard)
+                            val loginResponse = response.body()
+                            when (loginResponse?.rol) {
+                                "CLIENTE" -> {
+                                    findNavController().navigate(R.id.action_home_to_dashboard)
+                                }
+                                "VENDEDOR" -> {
+                                    findNavController().navigate(R.id.action_home_to_dashboard_vendedor)
+                                }
+                                else -> {
+                                    showErrorDialog("Rol no reconocido: ${loginResponse?.rol}")
+                                }
+                            }
                         } else {
                             val errorMessage = try {
                                 val jsonObj = JSONObject(response.errorBody()?.string() ?: "")

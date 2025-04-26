@@ -18,7 +18,7 @@ class MisEntregas : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_mis_pedidos, container, false)
+        val view = inflater.inflate(R.layout.fragment_mis_entregas, container, false)
 
         val closeButton: ImageView = view.findViewById(R.id.closeButton)
         closeButton.setOnClickListener {

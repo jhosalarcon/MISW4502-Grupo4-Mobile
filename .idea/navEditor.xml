@@ -8,6 +8,11 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="action_dashboard_to_clientes">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_dashboard_to_mis_entregas">
                     <value>
                       <LayoutPositions />
@@ -29,6 +34,11 @@
                     </value>
                   </entry>
                   <entry key="action_home_to_dashboard">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
+                  <entry key="action_home_to_dashboard_vendedor">
                     <value>
                       <LayoutPositions />
                     </value>
@@ -79,7 +89,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="dashboardV">
+                  <entry key="dashboardVendedor">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

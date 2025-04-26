@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,7 +27,7 @@ class AgregarItem : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_agregar_nuevo_item, container, false)
 
-        val etNombreItem: EditText = view.findViewById(R.id.etNombreItem)
+        val spinnerNombreItem: Spinner = view.findViewById(R.id.spinnerNombreItem)
         val etDescripcion: EditText = view.findViewById(R.id.etDescripcionItem)
         val etPrecio: EditText = view.findViewById(R.id.etPrecio)
         val etCantidad: EditText = view.findViewById(R.id.etCantidad)
@@ -36,7 +37,7 @@ class AgregarItem : Fragment() {
         val btnBack: ImageButton = view.findViewById(R.id.btnBack)
 
         btnGuardar.setOnClickListener {
-            val nombre = etNombreItem.text.toString()
+            val nombre = spinnerNombreItem.selectedItem.toString()
             val descripcion = etDescripcion.text.toString()
             val precio = etPrecio.text.toString().toDoubleOrNull()
             val cantidad = etCantidad.text.toString().toIntOrNull()

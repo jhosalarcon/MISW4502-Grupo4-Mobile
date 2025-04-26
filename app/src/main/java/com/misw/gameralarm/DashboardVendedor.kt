@@ -37,20 +37,20 @@ class DashboardVendedor : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_dashboard_vendedor, container, false)
 
+        val btnClientes: Button = view.findViewById(R.id.btnClientes)
+        val btnRutas: Button = view.findViewById(R.id.btnRutaVisitas)
         val btnCrearPedido: Button = view.findViewById(R.id.btnCrearPedido)
-        val btnVerPedidos: Button = view.findViewById(R.id.btnClientes)
-        val btnEntregas: Button = view.findViewById(R.id.btnRutaVisitas)
 
-        btnCrearPedido.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_nuevo_pedido)
+        btnClientes.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboard_to_clientes)
         }
 
-        btnVerPedidos.setOnClickListener {
+        btnRutas.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
         }
 
-        btnEntregas.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_mis_entregas)
+        btnCrearPedido.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboard_to_nuevo_pedido)
         }
 
 

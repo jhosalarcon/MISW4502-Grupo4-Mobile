@@ -54,6 +54,11 @@
         android:name="com.misw.gameralarm.DashboardVendedor"
         tools:layout="@layout/fragment_dashboard_vendedor" />
 
+    <fragment
+        android:id="@+id/clientes"
+        android:name="com.misw.gameralarm.MisClientes"
+        tools:layout="@layout/fragment_mis_clientes" />
+
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />
@@ -85,6 +90,10 @@
     <action
         android:id="@+id/action_dashboard_to_mis_entregas"
         app:destination="@id/mis_entregas" />
+
+    <action
+        android:id="@+id/action_dashboard_to_clientes"
+        app:destination="@id/clientes" />
 
     <fragment
         android:id="@+id/misPedidos"

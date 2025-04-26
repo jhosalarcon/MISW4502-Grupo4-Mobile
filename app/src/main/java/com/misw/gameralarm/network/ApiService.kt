@@ -1,5 +1,6 @@
 package com.misw.gameralarm.data.network
 
+import com.misw.gameralarm.data.model.ClienteResponse
 import com.misw.gameralarm.data.model.CrearCuentaRequest
 import com.misw.gameralarm.data.model.CrearCuentaResponse
 import com.misw.gameralarm.data.model.LoginRequest
@@ -10,6 +11,7 @@ import com.misw.gameralarm.data.model.PedidoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
@@ -24,4 +26,11 @@ interface ApiService {
 
     @GET("sales/sales")
     fun listarPedidos(): Call<List<PedidoResponse>>
+
+    @GET("inventary/products")
+    fun obtenerProductos(): Call<List<String>>
+
+    @GET("/auth/clients/all")
+    fun listarClientes(@Header("Authorization") token: String): Call<List<ClienteResponse>>
+
 }

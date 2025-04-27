@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.misw.gameralarm.data.model.PedidoResponse
 import com.misw.gameralarm.network.ApiClient
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,7 +53,6 @@ class MisPedidos : Fragment() {
                             val bundle = Bundle().apply {
                                 putString("orderId", orden.pedido_id.toString())
                             }
-                            findNavController().navigate(R.id.action_misPedidos_to_detallePedido, bundle)
                         }
 
                         ordersList.addView(cardView)

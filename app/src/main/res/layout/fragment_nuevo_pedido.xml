@@ -44,7 +44,21 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="76dp" />
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:id="@+id/layoutCards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
         <ImageView
+            android:id="@+id/emptyImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/new_item" />

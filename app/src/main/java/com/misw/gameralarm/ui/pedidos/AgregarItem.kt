@@ -28,8 +28,8 @@ class AgregarItem : Fragment() {
     private lateinit var btnGuardar: Button
     private lateinit var btnBack: ImageButton
 
-    private var productosList: List<NuevoProductoRequest> = emptyList()
-    private var productoSeleccionado: NuevoProductoRequest? = null
+    private var productosList: List<NuevoProductoResponse> = emptyList()
+    private var productoSeleccionado: NuevoProductoResponse? = null
     private var authToken: String? = null
 
     override fun onCreateView(
@@ -56,6 +56,11 @@ class AgregarItem : Fragment() {
                 if (productosList.isNotEmpty()) {
                     productoSeleccionado = productosList[position]
                     llenarCamposConProducto(productoSeleccionado!!)
+
+                    // Guardar el producto_id cuando se selecciona el producto en el spinner
+                    productoSeleccionado?.producto_id?.let {
+                        guardarProductIdEnPrefs(it)
+                    }
                 }
             }
 
@@ -63,7 +68,13 @@ class AgregarItem : Fragment() {
         }
 
         btnGuardar.setOnClickListener {
-            guardarProducto()
+            // No hacer POST, solo guardar el producto_id seleccionado
+            productoSeleccionado?.producto_id?.let {
+                guardarProductIdEnPrefs(it)
+                showSuccessDialog("Producto seleccionado guardado correctamente")
+            } ?: run {
+                showErrorDialog("Debe seleccionar un producto")
+            }
         }
 
         btnBack.setOnClickListener {
@@ -85,8 +96,8 @@ class AgregarItem : Fragment() {
         }
 
         ApiClient.apiService.obtenerProductos("Bearer $authToken")
-            .enqueue(object : Callback<List<NuevoProductoRequest>> {
-                override fun onResponse(call: Call<List<NuevoProductoRequest>>, response: Response<List<NuevoProductoRequest>>) {
+            .enqueue(object : Callback<List<NuevoProductoResponse>> {
+                override fun onResponse(call: Call<List<NuevoProductoResponse>>, response: Response<List<NuevoProductoResponse>>) {
                     if (response.isSuccessful) {
                         productosList = response.body() ?: emptyList()
 
@@ -100,59 +111,18 @@ class AgregarItem : Fragment() {
                     }
                 }
 
-                override fun onFailure(call: Call<List<NuevoProductoRequest>>, t: Throwable) {
+                override fun onFailure(call: Call<List<NuevoProductoResponse>>, t: Throwable) {
                     showErrorDialog("Error de red al cargar productos: ${t.message}")
                 }
             })
     }
 
-    private fun llenarCamposConProducto(producto: NuevoProductoRequest) {
+    private fun llenarCamposConProducto(producto: NuevoProductoResponse) {
         tvDescripcion.text = producto.descripcion
         tvPrecio.text = producto.precio_unitario.toString()
         etCantidad.setText(producto.cantidad.toString())
         tvTipo.text = producto.tipo
         tvUbicacion.text = producto.ubicacion
-    }
-
-    private fun guardarProducto() {
-        val nombre = spinnerNombreItem.selectedItem.toString()
-        val descripcion = tvDescripcion.text.toString()
-        val precio = tvPrecio.text.toString().toDoubleOrNull()
-        val cantidad = etCantidad.text.toString().toIntOrNull()
-        val tipo = tvTipo.text.toString()
-        val ubicacion = tvUbicacion.text.toString()
-
-        if (nombre.isNotEmpty() && descripcion.isNotEmpty() && precio != null && cantidad != null && tipo.isNotEmpty() && ubicacion.isNotEmpty()) {
-            val request = NuevoProductoRequest(nombre, descripcion, precio, cantidad, tipo, ubicacion)
-
-            productoSeleccionado?.let {
-                ApiClient.apiService.agregarProducto("Bearer $authToken", request)
-                    .enqueue(object : Callback<NuevoProductoResponse> {
-                        override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
-                            if (response.isSuccessful) {
-                                val nuevoProducto = response.body()
-                                nuevoProducto?.let {
-                                    // GUARDAMOS el product_id en SharedPreferences
-                                    guardarProductIdEnPrefs(it.producto_id)
-                                    showSuccessDialog("Producto agregado al pedido exitosamente")
-                                } ?: run {
-                                    showErrorDialog("Respuesta vacía del servidor")
-                                }
-                            } else {
-                                showErrorDialog("Error al agregar el producto")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<NuevoProductoResponse>, t: Throwable) {
-                            showErrorDialog("Error de red al agregar: ${t.message}")
-                        }
-                    })
-            } ?: run {
-                showErrorDialog("Seleccione un producto")
-            }
-        } else {
-            showErrorDialog("Debe ingresar todos los campos correctamente")
-        }
     }
 
     private fun showErrorDialog(message: String) {
@@ -191,6 +161,4 @@ class AgregarItem : Fragment() {
             apply()
         }
     }
-
-
 }

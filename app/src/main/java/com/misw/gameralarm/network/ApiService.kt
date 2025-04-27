@@ -29,10 +29,10 @@ interface ApiService {
     fun listarPedidos(): Call<List<PedidoResponse>>
 
     @GET("inventary/products")
-    fun obtenerProductos(@Header("Authorization") token: String): Call<List<NuevoProductoRequest>>
+    fun obtenerProductos(@Header("Authorization") token: String): Call<List<NuevoProductoResponse>>
 
     @GET("inventary/products/{id}")
-    fun obtenerProducto(@Path("id") id: Int): Call<NuevoProductoResponse>
+    fun obtenerProducto(@Header("Authorization") token: String, @Path("id") id: Int): Call<NuevoProductoResponse>
 
     @GET("/auth/clients/all")
     fun listarClientes(@Header("Authorization") token: String): Call<List<ClienteResponse>>

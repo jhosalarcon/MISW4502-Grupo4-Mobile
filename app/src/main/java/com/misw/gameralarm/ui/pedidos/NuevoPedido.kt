@@ -22,24 +22,17 @@ private const val ARG_PARAM2 = "param2"
 
 class NuevoPedido : Fragment() {
 
-    private var param1: String? = null
-    private var param2: String? = null
-
     private lateinit var layoutCards: LinearLayout
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_nuevo_pedido, container, false)
+
+        // Obtener el token de autorización
+        token = getAuthToken()
 
         layoutCards = view.findViewById(R.id.layoutCards)
 
@@ -56,6 +49,16 @@ class NuevoPedido : Fragment() {
         mostrarProductosAgregados(view)
 
         return view
+    }
+
+    // Obtener el token de autorización desde SharedPreferences
+    private fun getAuthToken(): String? {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
+        token = sharedPref.getString("auth_token", null)
+
+        // También puedes considerar sobrescribirlo si viene como argumento
+        token = arguments?.getString("token") ?: token
+        return token
     }
 
     private fun mostrarProductosAgregados(view: View) {
@@ -104,7 +107,14 @@ class NuevoPedido : Fragment() {
             cardView.addView(textView)
             layoutCards.addView(cardView)
 
-            ApiClient.apiService.obtenerProducto(id).enqueue(object : Callback<NuevoProductoResponse> {
+            // Verificar si el token de autorización es nulo
+            if (token == null) {
+                textView.text = "Token de autorización no encontrado"
+                return
+            }
+
+            // Hacer la llamada a la API para obtener los datos del producto con el header Authorization
+            ApiClient.apiService.obtenerProducto("Bearer $token", id).enqueue(object : Callback<NuevoProductoResponse> {
                 override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
                     if (response.isSuccessful) {
                         val producto = response.body()
@@ -120,27 +130,6 @@ class NuevoPedido : Fragment() {
             })
         }
     }
-
-
-
-
-    private fun showPopup(title: String, message: String) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(title)
-        builder.setMessage(message)
-        builder.setPositiveButton("Cerrar") { dialog, _ -> dialog.dismiss() }
-        val dialog = builder.create()
-        dialog.show()
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            Dashboard().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
+
+

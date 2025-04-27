@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.misw.gameralarm.R
-import com.misw.gameralarm.data.model.NuevoProductoRequest
 import com.misw.gameralarm.data.model.NuevoProductoResponse
 import com.misw.gameralarm.network.ApiClient
 import retrofit2.Call
@@ -56,16 +55,13 @@ class AgregarItem : Fragment() {
                 if (productosList.isNotEmpty()) {
                     productoSeleccionado = productosList[position]
                     llenarCamposConProducto(productoSeleccionado!!)
-
-                    // Guardar el producto_id cuando se selecciona el producto en el spinner
-                    productoSeleccionado?.producto_id?.let {
-                        guardarProductIdEnPrefs(it)
-                    }
+                    // Aquí ya no guardamos nada, solo seleccionamos el producto
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
 
         btnGuardar.setOnClickListener {
             // No hacer POST, solo guardar el producto_id seleccionado
@@ -149,6 +145,7 @@ class AgregarItem : Fragment() {
     private fun guardarProductIdEnPrefs(productId: Int) {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         val existingIds = sharedPref.getString("product_ids", "")
+        val existingPrecios = sharedPref.getString("product_prices", "")
 
         val updatedIds = if (existingIds.isNullOrEmpty()) {
             productId.toString()
@@ -156,9 +153,18 @@ class AgregarItem : Fragment() {
             "$existingIds,$productId"
         }
 
+        val precioUnitario = productoSeleccionado?.precio_unitario ?: 0.0
+        val updatedPrecios = if (existingPrecios.isNullOrEmpty()) {
+            precioUnitario.toString()
+        } else {
+            "$existingPrecios,$precioUnitario"
+        }
+
         with(sharedPref.edit()) {
             putString("product_ids", updatedIds)
+            putString("product_prices", updatedPrecios)
             apply()
         }
     }
+
 }

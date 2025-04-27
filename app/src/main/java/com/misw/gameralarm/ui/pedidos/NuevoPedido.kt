@@ -23,7 +23,9 @@ private const val ARG_PARAM2 = "param2"
 class NuevoPedido : Fragment() {
 
     private lateinit var layoutCards: LinearLayout
+    private lateinit var btnGuardarPedido: Button
     private var token: String? = null
+    private lateinit var labelTotal: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +35,13 @@ class NuevoPedido : Fragment() {
 
         // Obtener el token de autorización
         token = getAuthToken()
-
         layoutCards = view.findViewById(R.id.layoutCards)
+        btnGuardarPedido = view.findViewById(R.id.btnGuardarPedido)
+        labelTotal = view.findViewById(R.id.labelTotal)
+
+        if (hayProductosGuardados()) {
+            btnGuardarPedido.visibility = View.VISIBLE
+        }
 
         val btnNuevoItem: Button = view.findViewById(R.id.btnNuevoItem)
         btnNuevoItem.setOnClickListener {
@@ -46,7 +53,14 @@ class NuevoPedido : Fragment() {
             findNavController().navigateUp()
         }
 
+        btnGuardarPedido.setOnClickListener {
+            // Aquí puedes agregar lo que quieres que pase al guardar el pedido
+            guardarPedido()
+            findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
+        }
+
         mostrarProductosAgregados(view)
+        calcularYMostrarTotal()
 
         return view
     }
@@ -118,7 +132,7 @@ class NuevoPedido : Fragment() {
                 override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
                     if (response.isSuccessful) {
                         val producto = response.body()
-                        textView.text = producto?.descripcion ?: "Sin descripción"
+                        textView.text = producto?.nombre ?: "Sin nombre"
                     } else {
                         textView.text = "No encontrado ($id)"
                     }
@@ -130,6 +144,43 @@ class NuevoPedido : Fragment() {
             })
         }
     }
+    private fun hayProductosGuardados(): Boolean {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val ids = sharedPref.getString("product_ids", null)
+        return !ids.isNullOrEmpty()
+    }
+
+    private fun guardarPedido() {
+        // Aquí haces la lógica de guardar el pedido, enviar a API, etc.
+        Toast.makeText(requireContext(), "Pedido guardado exitosamente", Toast.LENGTH_SHORT).show()
+
+        limpiarProductosGuardados()
+
+        // Opcional: Navegar a otro fragmento después
+        // findNavController().navigate(R.id.action_nuevoPedido_to_dashboard)
+    }
+
+    private fun limpiarProductosGuardados() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("product_ids")
+            apply()
+        }
+    }
+    private fun calcularYMostrarTotal() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val preciosString = sharedPref.getString("product_prices", null)
+
+        val precios: List<Double> = preciosString
+            ?.split(",")
+            ?.mapNotNull { it.toDoubleOrNull() }
+            ?: emptyList()
+
+        val total = precios.sum()
+
+        labelTotal.text = "Total: $%.2f".format(total)
+    }
+
 }
 
 

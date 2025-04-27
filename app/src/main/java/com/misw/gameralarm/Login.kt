@@ -44,7 +44,22 @@ class Login : Fragment() {
                         response: Response<LoginResponse>
                     ) {
                         if (response.isSuccessful) {
-                            findNavController().navigate(R.id.action_home_to_dashboard)
+                            val loginResponse = response.body()
+                            loginResponse?.token?.let { token ->
+                                saveAuthToken(token) // <<--- Guarda el token aquí
+                            }
+
+                            when (loginResponse?.rol) {
+                                "CLIENTE" -> {
+                                    findNavController().navigate(R.id.action_home_to_dashboard)
+                                }
+                                "VENDEDOR" -> {
+                                    findNavController().navigate(R.id.action_home_to_dashboard_vendedor)
+                                }
+                                else -> {
+                                    showErrorDialog("Rol no reconocido: ${loginResponse?.rol}")
+                                }
+                            }
                         } else {
                             val errorMessage = try {
                                 val jsonObj = JSONObject(response.errorBody()?.string() ?: "")
@@ -82,5 +97,10 @@ class Login : Fragment() {
         builder.setMessage(message)
         builder.setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
+    }
+
+    private fun saveAuthToken(token: String) {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
+        sharedPref.edit().putString("auth_token", token).apply()
     }
 }

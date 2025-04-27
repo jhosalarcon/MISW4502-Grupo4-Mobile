@@ -51,12 +51,12 @@
             android:textSize="16sp"
             android:textColor="@android:color/black" />
 
-        <EditText
-            android:id="@+id/etNombreItem"
+        <Spinner
+            android:id="@+id/spinnerNombreItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="-"
-            android:inputType="textPersonName" />
+            android:layout_height="45dp"
+            android:layout_marginBottom="18dp"
+            android:spinnerMode="dropdown" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,11 +65,12 @@
             android:textSize="16sp"
             android:textColor="@android:color/black" />
 
-        <EditText
+        <TextView
             android:id="@+id/etDescripcionItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="-"
+            android:padding="8dp"
             android:inputType="text" />
 
         <TextView
@@ -80,7 +81,7 @@
             android:textColor="@android:color/black"
             android:layout_marginTop="16dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/etPrecio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,9 +131,10 @@
                     android:textSize="16sp"
                     android:textColor="@android:color/black" />
 
-                <EditText
+                <TextView
                     android:id="@+id/etTipo"
                     android:hint="-"
+                    android:padding="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text" />
@@ -148,11 +150,12 @@
             android:textColor="@android:color/black"
             android:layout_marginTop="16dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/etUbicacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:padding="8dp"
             android:hint="-" />
 
         <Button

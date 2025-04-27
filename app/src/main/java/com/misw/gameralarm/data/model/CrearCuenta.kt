@@ -4,7 +4,8 @@ data class CrearCuentaRequest(
     val nombre: String,
     val telefono: String,
     val email: String,
-    val password: String
+    val password: String,
+    val rol: String
 )
 
 data class CrearCuentaResponse(

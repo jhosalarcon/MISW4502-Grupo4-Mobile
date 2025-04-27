@@ -7,10 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
-import com.misw.gameralarm.data.model.NuevoProductoRequest
 import com.misw.gameralarm.data.model.NuevoProductoResponse
 import com.misw.gameralarm.network.ApiClient
 import retrofit2.Call
@@ -65,12 +63,9 @@ class NuevoPedido : Fragment() {
         return view
     }
 
-    // Obtener el token de autorización desde SharedPreferences
     private fun getAuthToken(): String? {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
         token = sharedPref.getString("auth_token", null)
-
-        // También puedes considerar sobrescribirlo si viene como argumento
         token = arguments?.getString("token") ?: token
         return token
     }
@@ -151,13 +146,8 @@ class NuevoPedido : Fragment() {
     }
 
     private fun guardarPedido() {
-        // Aquí haces la lógica de guardar el pedido, enviar a API, etc.
         Toast.makeText(requireContext(), "Pedido guardado exitosamente", Toast.LENGTH_SHORT).show()
-
         limpiarProductosGuardados()
-
-        // Opcional: Navegar a otro fragmento después
-        // findNavController().navigate(R.id.action_nuevoPedido_to_dashboard)
     }
 
     private fun limpiarProductosGuardados() {

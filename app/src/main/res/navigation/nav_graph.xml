@@ -38,14 +38,34 @@
         android:id="@+id/mis_pedidos"
         android:name="com.misw.gameralarm.MisPedidos"
         tools:layout="@layout/fragment_mis_pedidos" />
+
     <fragment
         android:id="@+id/detallePedido"
         android:name="com.misw.gameralarm.DetallePedido"
         tools:layout="@layout/fragment_detalle_pedido" />
 
+    <fragment
+        android:id="@+id/mis_entregas"
+        android:name="com.misw.gameralarm.MisEntregas"
+        tools:layout="@layout/fragment_mis_entregas" />
+
+    <fragment
+        android:id="@+id/dashboardVendedor"
+        android:name="com.misw.gameralarm.DashboardVendedor"
+        tools:layout="@layout/fragment_dashboard_vendedor" />
+
+    <fragment
+        android:id="@+id/clientes"
+        android:name="com.misw.gameralarm.MisClientes"
+        tools:layout="@layout/fragment_mis_clientes" />
+
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />
+
+    <action
+        android:id="@+id/action_home_to_dashboard_vendedor"
+        app:destination="@id/dashboardVendedor" />
 
     <action
         android:id="@+id/action_home_to_crear_cuenta"
@@ -66,6 +86,14 @@
     <action
         android:id="@+id/action_recompensas_to_reclamar"
         app:destination="@id/reclamarRecompensas" />
+
+    <action
+        android:id="@+id/action_dashboard_to_mis_entregas"
+        app:destination="@id/mis_entregas" />
+
+    <action
+        android:id="@+id/action_dashboard_to_clientes"
+        app:destination="@id/clientes" />
 
     <fragment
         android:id="@+id/misPedidos"

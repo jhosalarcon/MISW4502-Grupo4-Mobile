@@ -38,7 +38,6 @@ class DetallePedido : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_agregar_nuevo_item, container, false)
 
-        val etNombreItem: EditText = view.findViewById(R.id.etNombreItem)
         val etCantidad: EditText = view.findViewById(R.id.etCantidad)
         val etPrecio: EditText = view.findViewById(R.id.etPrecio)
         val btnGuardar: Button = view.findViewById(R.id.btnGuardar)
@@ -50,13 +49,11 @@ class DetallePedido : Fragment() {
         }
 
         btnGuardar.setOnClickListener {
-            val nombre = etNombreItem.text.toString()
             val cantidad = etCantidad.text.toString()
             val precio = etPrecio.text.toString()
 
 
             showPopup("Item guardado", """
-                Nombre: $nombre
                 Cantidad: $cantidad  
                 Precio: $precio
             """.trimIndent())

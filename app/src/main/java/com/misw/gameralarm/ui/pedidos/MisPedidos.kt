@@ -11,6 +11,11 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.misw.gameralarm.data.model.PedidoResponse
+import com.misw.gameralarm.network.ApiClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MisPedidos : Fragment() {
 
@@ -19,47 +24,53 @@ class MisPedidos : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_mis_pedidos, container, false)
-
+        val ordersList: LinearLayout = view.findViewById(R.id.ordersList)
         val closeButton: ImageView = view.findViewById(R.id.closeButton)
+        val btnBack: ImageButton = view.findViewById(R.id.btnBack)
+
         closeButton.setOnClickListener {
             findNavController().navigateUp()
         }
-
-        val ordersList: LinearLayout = view.findViewById(R.id.ordersList)
-
-        for (i in 0 until ordersList.childCount) {
-            val child = ordersList.getChildAt(i)
-            if (child is CardView) {
-                child.setOnClickListener {
-                    val orderTextView = child.findViewById<TextView>(R.id.orderNumberTextView)
-                    val orderText = orderTextView.text.toString()  // e.g. "Order #456765"
-                    val orderId = orderText.substringAfter("#").trim()  // e.g. "456765"
-
-                    val bundle = Bundle().apply {
-                        putString("orderId", orderId)
-                    }
-
-                    findNavController().navigate(R.id.action_misPedidos_to_detallePedido, bundle)
-                }
-            }
-        }
-        val btnBack: ImageButton = view.findViewById(R.id.btnBack)
 
         btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
+        ApiClient.apiService.listarPedidos().enqueue(object : Callback<List<PedidoResponse>> {
+            override fun onResponse(call: Call<List<PedidoResponse>>, response: Response<List<PedidoResponse>>) {
+                if (response.isSuccessful) {
+                    val ordenes = response.body() ?: emptyList()
+                    ordersList.removeAllViews()
+                    ordenes.forEach { orden ->
+                        val cardView = layoutInflater.inflate(R.layout.order_card_view, null) as CardView
+                        val orderNumberTextView = cardView.findViewById<TextView>(R.id.orderNumberTextView)
+                        val itemCountTextView = cardView.findViewById<TextView>(R.id.itemCountTextView)
+
+                        orderNumberTextView.text = "Order #${orden.pedido_id}"
+                        itemCountTextView.text = "${orden.total} items"
+
+                        cardView.setOnClickListener {
+                            val bundle = Bundle().apply {
+                                putString("orderId", orden.pedido_id.toString())
+                            }
+                        }
+
+                        ordersList.addView(cardView)
+                    }
+                } else {
+                    showError("Error al obtener pedidos")
+                }
+            }
+
+            override fun onFailure(call: Call<List<PedidoResponse>>, t: Throwable) {
+                showError("Error de red: ${t.message}")
+            }
+        })
+
         return view
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MisPedidos().apply {
-                arguments = Bundle().apply {
-                    putString("param1", param1)
-                    putString("param2", param2)
-                }
-            }
+    private fun showError(message: String) {
+        // Aquí podrías agregar un Toast, Log o Dialog
     }
 }

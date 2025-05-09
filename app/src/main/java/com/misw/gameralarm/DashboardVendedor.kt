@@ -40,6 +40,7 @@ class DashboardVendedor : Fragment() {
         val btnClientes: Button = view.findViewById(R.id.btnClientes)
         val btnRutas: Button = view.findViewById(R.id.btnRutaVisitas)
         val btnCrearPedido: Button = view.findViewById(R.id.btnCrearPedido)
+        val btnDuckIA: Button = view.findViewById(R.id.btnDuckIA)
 
         btnClientes.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_clientes)
@@ -51,6 +52,10 @@ class DashboardVendedor : Fragment() {
 
         btnCrearPedido.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_nuevo_pedido)
+        }
+
+        btnDuckIA.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboard_to_duckia)
         }
 
 

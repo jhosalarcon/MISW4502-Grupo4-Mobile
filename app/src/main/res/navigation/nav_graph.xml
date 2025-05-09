@@ -64,6 +64,16 @@
         android:name="com.misw.gameralarm.Rutas"
         tools:layout="@layout/fragment_ruta_visitas" />
 
+    <fragment
+        android:id="@+id/duckia"
+        android:name="com.misw.gameralarm.DuckIAVideoFragment"
+        tools:layout="@layout/fragment_duck_ia" />
+
+
+    <action
+        android:id="@+id/action_dashboard_to_duckia"
+        app:destination="@id/duckia" />
+
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />

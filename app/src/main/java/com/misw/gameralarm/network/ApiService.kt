@@ -2,6 +2,7 @@ package com.misw.gameralarm.data.network
 
 import OrderRequest
 import OrderResponse
+import VideoRequest
 import com.misw.gameralarm.data.model.ClienteResponse
 import com.misw.gameralarm.data.model.CrearCuentaRequest
 import com.misw.gameralarm.data.model.CrearCuentaResponse
@@ -50,5 +51,13 @@ interface ApiService {
 
     @POST("/sales/sales")
     fun guardarPedido(@Header("Authorization") token: String, @Body request: OrderRequest): Call<Void>
+
+    @POST("/video")
+    fun cargarVideo(string: String): Call<Void>
+
+    @POST("/video")
+    fun procesarVideo(): Call<Void>
+
+
 
 }

@@ -24,6 +24,7 @@ class NuevoPedido : Fragment() {
 
     private lateinit var layoutCards: LinearLayout
     private lateinit var btnGuardarPedido: Button
+    private lateinit var btnCancelarPedido: Button
     private var token: String? = null
     private lateinit var labelTotal: TextView
 
@@ -36,10 +37,12 @@ class NuevoPedido : Fragment() {
         token = getAuthToken()
         layoutCards = view.findViewById(R.id.layoutCards)
         btnGuardarPedido = view.findViewById(R.id.btnGuardarPedido)
+        btnCancelarPedido = view.findViewById(R.id.btnCancelarPedido)
         labelTotal = view.findViewById(R.id.labelTotal)
 
         if (hayProductosGuardados()) {
             btnGuardarPedido.visibility = View.VISIBLE
+            btnCancelarPedido.visibility = View.VISIBLE
         }
 
         val btnNuevoItem: Button = view.findViewById(R.id.btnNuevoItem)
@@ -54,6 +57,10 @@ class NuevoPedido : Fragment() {
 
         btnGuardarPedido.setOnClickListener {
             guardarPedido()
+        }
+
+        btnCancelarPedido.setOnClickListener {
+            cancelarPedido()
         }
 
         mostrarProductosAgregados(view)
@@ -206,19 +213,46 @@ class NuevoPedido : Fragment() {
             apply()
         }
     }
+
+    private fun cancelarPedido() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("product_ids")
+            remove("product_prices")
+            remove("product_quantities")
+            apply()
+        }
+
+        Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
+
+        findNavController().navigate(R.id.action_home_to_dashboard)
+    }
+
     private fun calcularYMostrarTotal() {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         val preciosString = sharedPref.getString("product_prices", null)
+        val cantidadesString = sharedPref.getString("product_quantities", null)
 
         val precios: List<Double> = preciosString
             ?.split(",")
             ?.mapNotNull { it.toDoubleOrNull() }
             ?: emptyList()
 
-        val total = precios.sum()
+        val cantidades: List<Int> = cantidadesString
+            ?.split(",")
+            ?.mapNotNull { it.toIntOrNull() }
+            ?: emptyList()
+
+        if (precios.size != cantidades.size) {
+            labelTotal.text = "Total: Error en datos"
+            return
+        }
+
+        val total = precios.indices.sumOf { precios[it] * cantidades[it] }
 
         labelTotal.text = "Total: $%.2f".format(total)
     }
+
 
 }
 

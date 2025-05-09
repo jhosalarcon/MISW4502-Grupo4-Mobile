@@ -1,17 +1,12 @@
 package com.misw.gameralarm
 
+import OrderResponse
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.misw.gameralarm.data.model.PedidoResponse
 import com.misw.gameralarm.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,58 +14,98 @@ import retrofit2.Response
 
 class MisPedidos : Fragment() {
 
+    private lateinit var ordersList: LinearLayout
+    private lateinit var sharedPref: android.content.SharedPreferences
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_mis_pedidos, container, false)
-        val ordersList: LinearLayout = view.findViewById(R.id.ordersList)
-        val closeButton: ImageView = view.findViewById(R.id.closeButton)
-        val btnBack: ImageButton = view.findViewById(R.id.btnBack)
+        ordersList = view.findViewById(R.id.ordersList)
+        sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
 
-        closeButton.setOnClickListener {
+        view.findViewById<ImageView>(R.id.closeButton).setOnClickListener {
+            findNavController().navigateUp()
+        }
+        view.findViewById<ImageButton>(R.id.btnBack).setOnClickListener {
             findNavController().navigateUp()
         }
 
-        btnBack.setOnClickListener {
-            findNavController().navigateUp()
+        val userId = sharedPref.getString("user_id", null)?.toIntOrNull()
+        val userRole = sharedPref.getString("user_role", null)
+
+        if (userId == null || userRole == null) {
+            showError("Datos de usuario incompletos")
+            return view
         }
 
-        ApiClient.apiService.listarPedidos().enqueue(object : Callback<List<PedidoResponse>> {
-            override fun onResponse(call: Call<List<PedidoResponse>>, response: Response<List<PedidoResponse>>) {
+        loadOrders(userId, userRole)
+
+        return view
+    }
+
+    private fun loadOrders(userId: Int, role: String) {
+        val call = when (role) {
+            "CLIENTE" -> ApiClient.apiService.listarPedidosPorUsuario(userId)
+            else -> ApiClient.apiService.listarPedidosPorVendedor(userId)
+        }
+
+        call.enqueue(object : Callback<List<OrderResponse>> {
+            override fun onResponse(
+                call: Call<List<OrderResponse>>,
+                response: Response<List<OrderResponse>>
+            ) {
                 if (response.isSuccessful) {
-                    val ordenes = response.body() ?: emptyList()
-                    ordersList.removeAllViews()
-                    ordenes.forEach { orden ->
-                        val cardView = layoutInflater.inflate(R.layout.order_card_view, null) as CardView
-                        val orderNumberTextView = cardView.findViewById<TextView>(R.id.orderNumberTextView)
-                        val itemCountTextView = cardView.findViewById<TextView>(R.id.itemCountTextView)
-
-                        orderNumberTextView.text = "Order #${orden.pedido_id}"
-                        itemCountTextView.text = "${orden.total} items"
-
-                        cardView.setOnClickListener {
-                            val bundle = Bundle().apply {
-                                putString("orderId", orden.pedido_id.toString())
-                            }
-                        }
-
-                        ordersList.addView(cardView)
-                    }
+                    val orders = response.body().orEmpty()
+                    showOrders(orders)
                 } else {
                     showError("Error al obtener pedidos")
                 }
             }
 
-            override fun onFailure(call: Call<List<PedidoResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<List<OrderResponse>>, t: Throwable) {
                 showError("Error de red: ${t.message}")
             }
         })
+    }
 
-        return view
+    private fun showOrders(orders: List<OrderResponse>) {
+        ordersList.removeAllViews()
+
+        if (orders.isEmpty()) {
+            val emptyText = TextView(requireContext()).apply {
+                text = "No tienes pedidos todavía."
+                textSize = 16f
+                setPadding(16, 16, 16, 16)
+            }
+            ordersList.addView(emptyText)
+            return
+        }
+
+        orders.forEach { order ->
+            val card = createOrderCard(order)
+            ordersList.addView(card)
+        }
+    }
+
+    private fun createOrderCard(order: OrderResponse): View {
+        val cardView = layoutInflater.inflate(
+            R.layout.order_card_view, ordersList, false
+        ) as CardView
+
+        cardView.findViewById<TextView>(R.id.orderNumberTextView).text = "Pedido #${order.pedido_id}"
+        cardView.findViewById<TextView>(R.id.itemCountTextView).text = "${order.total} COP"
+
+        cardView.setOnClickListener {
+            sharedPref.edit().putString("pedido_id", order.pedido_id.toString()).apply()
+            val bundle = Bundle().apply { putString("orderId", order.pedido_id.toString()) }
+            findNavController().navigate(R.id.action_misPedidos_to_detallePedido, bundle)
+        }
+
+        return cardView
     }
 
     private fun showError(message: String) {
-        // Aquí podrías agregar un Toast, Log o Dialog
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

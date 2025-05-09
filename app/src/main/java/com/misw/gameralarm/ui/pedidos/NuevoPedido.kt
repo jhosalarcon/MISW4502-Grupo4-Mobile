@@ -1,5 +1,7 @@
 package com.misw.gameralarm
 
+import DetallePedidoRequest
+import OrderRequest
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.navigation.fragment.findNavController
-import com.misw.gameralarm.data.model.NuevoProductoRequest
 import com.misw.gameralarm.data.model.NuevoProductoResponse
 import com.misw.gameralarm.network.ApiClient
 import retrofit2.Call
@@ -23,7 +23,10 @@ private const val ARG_PARAM2 = "param2"
 class NuevoPedido : Fragment() {
 
     private lateinit var layoutCards: LinearLayout
+    private lateinit var btnGuardarPedido: Button
+    private lateinit var btnCancelarPedido: Button
     private var token: String? = null
+    private lateinit var labelTotal: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +34,16 @@ class NuevoPedido : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_nuevo_pedido, container, false)
 
-        // Obtener el token de autorización
         token = getAuthToken()
-
         layoutCards = view.findViewById(R.id.layoutCards)
+        btnGuardarPedido = view.findViewById(R.id.btnGuardarPedido)
+        btnCancelarPedido = view.findViewById(R.id.btnCancelarPedido)
+        labelTotal = view.findViewById(R.id.labelTotal)
+
+        if (hayProductosGuardados()) {
+            btnGuardarPedido.visibility = View.VISIBLE
+            btnCancelarPedido.visibility = View.VISIBLE
+        }
 
         val btnNuevoItem: Button = view.findViewById(R.id.btnNuevoItem)
         btnNuevoItem.setOnClickListener {
@@ -46,17 +55,23 @@ class NuevoPedido : Fragment() {
             findNavController().navigateUp()
         }
 
+        btnGuardarPedido.setOnClickListener {
+            guardarPedido()
+        }
+
+        btnCancelarPedido.setOnClickListener {
+            cancelarPedido()
+        }
+
         mostrarProductosAgregados(view)
+        calcularYMostrarTotal()
 
         return view
     }
 
-    // Obtener el token de autorización desde SharedPreferences
     private fun getAuthToken(): String? {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
         token = sharedPref.getString("auth_token", null)
-
-        // También puedes considerar sobrescribirlo si viene como argumento
         token = arguments?.getString("token") ?: token
         return token
     }
@@ -107,29 +122,175 @@ class NuevoPedido : Fragment() {
             cardView.addView(textView)
             layoutCards.addView(cardView)
 
-            // Verificar si el token de autorización es nulo
             if (token == null) {
                 textView.text = "Token de autorización no encontrado"
                 return
             }
 
-            // Hacer la llamada a la API para obtener los datos del producto con el header Authorization
-            ApiClient.apiService.obtenerProducto("Bearer $token", id).enqueue(object : Callback<NuevoProductoResponse> {
-                override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
-                    if (response.isSuccessful) {
-                        val producto = response.body()
-                        textView.text = producto?.descripcion ?: "Sin descripción"
-                    } else {
-                        textView.text = "No encontrado ($id)"
+            ApiClient.apiService.obtenerProducto("Bearer $token", id)
+                .enqueue(object : Callback<NuevoProductoResponse> {
+                    override fun onResponse(
+                        call: Call<NuevoProductoResponse>,
+                        response: Response<NuevoProductoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val producto = response.body()
+                            textView.text = producto?.nombre ?: "Sin nombre"
+                        } else {
+                            textView.text = "No encontrado ($id)"
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<NuevoProductoResponse>, t: Throwable) {
-                    textView.text = "Error cargando ($id)"
-                }
-            })
+                    override fun onFailure(call: Call<NuevoProductoResponse>, t: Throwable) {
+                        textView.text = "Error cargando ($id)"
+                    }
+                })
         }
     }
+
+    private fun hayProductosGuardados(): Boolean {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val ids = sharedPref.getString("product_ids", null)
+        return !ids.isNullOrEmpty()
+    }
+
+    private fun guardarPedido() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+
+        val userId = sharedPref.getString("user_id", null)?.toIntOrNull()
+        val rol = sharedPref.getString("user_role", null)
+
+        if (userId == null || rol == null) {
+            Toast.makeText(requireContext(), "Datos de usuario incompletos", Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        val idsString = sharedPref.getString("product_ids", null)
+        val quantitiesString = sharedPref.getString("product_quantities", null)
+        val pricesString = sharedPref.getString("product_prices", null)
+
+        val ids = idsString?.split(",")?.mapNotNull { it.toIntOrNull() } ?: return
+        val quantities = quantitiesString?.split(",")?.mapNotNull { it.toIntOrNull() } ?: return
+        val prices = pricesString?.split(",")?.mapNotNull { it.toDoubleOrNull() } ?: return
+
+        if (ids.size != quantities.size || ids.size != prices.size) {
+            Toast.makeText(
+                requireContext(),
+                "Error: datos de productos incompletos",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
+        val detalles = ids.indices.map {
+            DetallePedidoRequest(
+                id_producto = ids[it],
+                cantidad = quantities[it],
+                precio_unitario = prices[it]
+            )
+        }
+
+        val pedido = when (rol) {
+            "CLIENTE" -> OrderRequest(
+                id_cliente = userId,
+                id_vendedor = 10,
+                detalles = detalles
+            )
+
+            "VENDEDOR" -> OrderRequest(
+                id_cliente = 9,
+                id_vendedor = userId,
+                detalles = detalles
+            )
+
+            else -> {
+                Toast.makeText(requireContext(), "Rol no válido", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
+        val call = ApiClient.apiService.guardarPedido("Bearer $token", pedido)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Pedido enviado exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    limpiarProductosGuardados()
+                    findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
+                } else {
+                    Toast.makeText(requireContext(), "Error al guardar pedido", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(requireContext(), "Fallo de red: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+
+    private fun limpiarProductosGuardados() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            remove("product_ids")
+            remove("product_prices")
+            remove("product_quantities")
+            apply()
+        }
+    }
+
+    private fun cancelarPedido() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val rol = sharedPref.getString("user_role", null)
+
+        with(sharedPref.edit()) {
+            remove("product_ids")
+            remove("product_prices")
+            remove("product_quantities")
+            apply()
+        }
+
+        Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
+
+        if (rol == "CLIENTE") {
+            findNavController().navigate(R.id.action_home_to_dashboard)
+        } else {
+            findNavController().navigate(R.id.action_home_to_dashboard_vendedor)
+        }
+    }
+
+    private fun calcularYMostrarTotal() {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val preciosString = sharedPref.getString("product_prices", null)
+        val cantidadesString = sharedPref.getString("product_quantities", null)
+
+        val precios: List<Double> = preciosString
+            ?.split(",")
+            ?.mapNotNull { it.toDoubleOrNull() }
+            ?: emptyList()
+
+        val cantidades: List<Int> = cantidadesString
+            ?.split(",")
+            ?.mapNotNull { it.toIntOrNull() }
+            ?: emptyList()
+
+        if (precios.size != cantidades.size) {
+            labelTotal.text = "Total: Error en datos"
+            return
+        }
+
+        val total = precios.indices.sumOf { precios[it] * cantidades[it] }
+
+        labelTotal.text = "Total: $%.2f".format(total)
+    }
+
+
 }
 
 

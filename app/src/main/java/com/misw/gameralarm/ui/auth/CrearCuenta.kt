@@ -35,7 +35,7 @@ class CrearCuenta : Fragment() {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
             if (email.isNotEmpty() && password.isNotEmpty() && nombre.isNotEmpty() && telefono.isNotEmpty()) {
-                val request = CrearCuentaRequest(nombre, telefono, email, password)
+                val request = CrearCuentaRequest(nombre, telefono, email, password,"CLIENTE")
 
                 ApiClient.apiService.registerUser(request).enqueue(object : retrofit2.Callback<CrearCuentaResponse> {
                     override fun onResponse(
@@ -43,7 +43,7 @@ class CrearCuenta : Fragment() {
                         response: retrofit2.Response<CrearCuentaResponse>
                     ) {
                         if (response.isSuccessful && response.code() == 201) {
-                            findNavController().navigate(R.id.action_home_to_dashboard)
+                            showSuccessDialog("Cuenta creada exitosamente")
                         } else {
                             val errorBody = response.errorBody()?.string()
                             val errorMessage = try {
@@ -80,5 +80,17 @@ class CrearCuenta : Fragment() {
         builder.setMessage(message)
         builder.setPositiveButton("Aceptar") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
+    }
+
+    private fun showSuccessDialog(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Éxito")
+            .setMessage(message)
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+                findNavController().navigate(R.id.action_home_to_dashboard)
+            }
+            .create()
+            .show()
     }
 }

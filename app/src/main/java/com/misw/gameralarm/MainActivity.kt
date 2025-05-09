@@ -19,5 +19,6 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPref = getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         sharedPref.edit().remove("product_ids").apply()
+        sharedPref.edit().remove("product_prices").apply()
     }
 }

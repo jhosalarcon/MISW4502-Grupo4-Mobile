@@ -33,6 +33,9 @@ interface ApiService {
     @GET("sales/sales/client/{id}")
     fun listarPedidosPorUsuario(@Path("id") id: Int): Call<List<OrderResponse>>
 
+    @GET("sales/sales/seller/{id}")
+    fun listarPedidosPorVendedor(@Path("id") id: Int): Call<List<OrderResponse>>
+
     @GET("sales/sales/{id}")
     fun listarProductosPorOrden(@Path("id") id: Int): Call<OrderResponse>
 

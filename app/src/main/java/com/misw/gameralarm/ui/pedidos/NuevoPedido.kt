@@ -127,22 +127,27 @@ class NuevoPedido : Fragment() {
                 return
             }
 
-            ApiClient.apiService.obtenerProducto("Bearer $token", id).enqueue(object : Callback<NuevoProductoResponse> {
-                override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
-                    if (response.isSuccessful) {
-                        val producto = response.body()
-                        textView.text = producto?.nombre ?: "Sin nombre"
-                    } else {
-                        textView.text = "No encontrado ($id)"
+            ApiClient.apiService.obtenerProducto("Bearer $token", id)
+                .enqueue(object : Callback<NuevoProductoResponse> {
+                    override fun onResponse(
+                        call: Call<NuevoProductoResponse>,
+                        response: Response<NuevoProductoResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val producto = response.body()
+                            textView.text = producto?.nombre ?: "Sin nombre"
+                        } else {
+                            textView.text = "No encontrado ($id)"
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<NuevoProductoResponse>, t: Throwable) {
-                    textView.text = "Error cargando ($id)"
-                }
-            })
+                    override fun onFailure(call: Call<NuevoProductoResponse>, t: Throwable) {
+                        textView.text = "Error cargando ($id)"
+                    }
+                })
         }
     }
+
     private fun hayProductosGuardados(): Boolean {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         val ids = sharedPref.getString("product_ids", null)
@@ -153,8 +158,11 @@ class NuevoPedido : Fragment() {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
 
         val userId = sharedPref.getString("user_id", null)?.toIntOrNull()
-        if (userId == null) {
-            Toast.makeText(requireContext(), "ID de usuario no disponible", Toast.LENGTH_SHORT).show()
+        val rol = sharedPref.getString("user_role", null)
+
+        if (userId == null || rol == null) {
+            Toast.makeText(requireContext(), "Datos de usuario incompletos", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -167,7 +175,11 @@ class NuevoPedido : Fragment() {
         val prices = pricesString?.split(",")?.mapNotNull { it.toDoubleOrNull() } ?: return
 
         if (ids.size != quantities.size || ids.size != prices.size) {
-            Toast.makeText(requireContext(), "Error: datos de productos incompletos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Error: datos de productos incompletos",
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -179,26 +191,45 @@ class NuevoPedido : Fragment() {
             )
         }
 
-        val pedido = OrderRequest(
-            id_cliente = userId,
-            id_vendedor = 2,
-            detalles = detalles
-        )
+        val pedido = when (rol) {
+            "CLIENTE" -> OrderRequest(
+                id_cliente = userId,
+                id_vendedor = 10,
+                detalles = detalles
+            )
+
+            "VENDEDOR" -> OrderRequest(
+                id_cliente = 9,
+                id_vendedor = userId,
+                detalles = detalles
+            )
+
+            else -> {
+                Toast.makeText(requireContext(), "Rol no válido", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
 
         val call = ApiClient.apiService.guardarPedido("Bearer $token", pedido)
         call.enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "Pedido enviado exitosamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Pedido enviado exitosamente",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     limpiarProductosGuardados()
                     findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
                 } else {
-                    Toast.makeText(requireContext(), "Error al guardar pedido", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error al guardar pedido", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(requireContext(), "Fallo de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fallo de red: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
     }
@@ -216,6 +247,8 @@ class NuevoPedido : Fragment() {
 
     private fun cancelarPedido() {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+        val rol = sharedPref.getString("user_role", null)
+
         with(sharedPref.edit()) {
             remove("product_ids")
             remove("product_prices")
@@ -225,7 +258,11 @@ class NuevoPedido : Fragment() {
 
         Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
 
-        findNavController().navigate(R.id.action_home_to_dashboard)
+        if (rol == "CLIENTE") {
+            findNavController().navigate(R.id.action_home_to_dashboard)
+        } else {
+            findNavController().navigate(R.id.action_home_to_dashboard_vendedor)
+        }
     }
 
     private fun calcularYMostrarTotal() {

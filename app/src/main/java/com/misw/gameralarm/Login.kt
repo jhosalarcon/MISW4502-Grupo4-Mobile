@@ -51,6 +51,9 @@ class Login : Fragment() {
                             loginResponse?.id?.let { id ->
                                 saveUserId(id.toString())
                             }
+                            loginResponse?.rol?.let { rol ->
+                                saveUserRole(rol)
+                            }
 
                             when (loginResponse?.rol) {
                                 "CLIENTE" -> {
@@ -110,5 +113,9 @@ class Login : Fragment() {
     private fun saveUserId(id: String) {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
         sharedPref.edit().putString("user_id", id).apply()
+    }
+    private fun saveUserRole(role: String) {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
+        sharedPref.edit().putString("user_role", role).apply()
     }
 }

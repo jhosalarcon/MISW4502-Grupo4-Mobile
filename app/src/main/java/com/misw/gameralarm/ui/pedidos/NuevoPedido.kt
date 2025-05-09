@@ -1,5 +1,7 @@
 package com.misw.gameralarm
 
+import DetallePedidoRequest
+import OrderRequest
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -31,7 +33,6 @@ class NuevoPedido : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_nuevo_pedido, container, false)
 
-        // Obtener el token de autorización
         token = getAuthToken()
         layoutCards = view.findViewById(R.id.layoutCards)
         btnGuardarPedido = view.findViewById(R.id.btnGuardarPedido)
@@ -52,9 +53,7 @@ class NuevoPedido : Fragment() {
         }
 
         btnGuardarPedido.setOnClickListener {
-            // Aquí puedes agregar lo que quieres que pase al guardar el pedido
             guardarPedido()
-            findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
         }
 
         mostrarProductosAgregados(view)
@@ -116,13 +115,11 @@ class NuevoPedido : Fragment() {
             cardView.addView(textView)
             layoutCards.addView(cardView)
 
-            // Verificar si el token de autorización es nulo
             if (token == null) {
                 textView.text = "Token de autorización no encontrado"
                 return
             }
 
-            // Hacer la llamada a la API para obtener los datos del producto con el header Authorization
             ApiClient.apiService.obtenerProducto("Bearer $token", id).enqueue(object : Callback<NuevoProductoResponse> {
                 override fun onResponse(call: Call<NuevoProductoResponse>, response: Response<NuevoProductoResponse>) {
                     if (response.isSuccessful) {
@@ -146,14 +143,66 @@ class NuevoPedido : Fragment() {
     }
 
     private fun guardarPedido() {
-        Toast.makeText(requireContext(), "Pedido guardado exitosamente", Toast.LENGTH_SHORT).show()
-        limpiarProductosGuardados()
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
+
+        val userId = sharedPref.getString("user_id", null)?.toIntOrNull()
+        if (userId == null) {
+            Toast.makeText(requireContext(), "ID de usuario no disponible", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val idsString = sharedPref.getString("product_ids", null)
+        val quantitiesString = sharedPref.getString("product_quantities", null)
+        val pricesString = sharedPref.getString("product_prices", null)
+
+        val ids = idsString?.split(",")?.mapNotNull { it.toIntOrNull() } ?: return
+        val quantities = quantitiesString?.split(",")?.mapNotNull { it.toIntOrNull() } ?: return
+        val prices = pricesString?.split(",")?.mapNotNull { it.toDoubleOrNull() } ?: return
+
+        if (ids.size != quantities.size || ids.size != prices.size) {
+            Toast.makeText(requireContext(), "Error: datos de productos incompletos", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val detalles = ids.indices.map {
+            DetallePedidoRequest(
+                id_producto = ids[it],
+                cantidad = quantities[it],
+                precio_unitario = prices[it]
+            )
+        }
+
+        val pedido = OrderRequest(
+            id_cliente = userId,
+            id_vendedor = 2,
+            detalles = detalles
+        )
+
+        val call = ApiClient.apiService.guardarPedido("Bearer $token", pedido)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Pedido enviado exitosamente", Toast.LENGTH_SHORT).show()
+                    limpiarProductosGuardados()
+                    findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
+                } else {
+                    Toast.makeText(requireContext(), "Error al guardar pedido", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(requireContext(), "Fallo de red: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
 
     private fun limpiarProductosGuardados() {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             remove("product_ids")
+            remove("product_prices")
+            remove("product_quantities")
             apply()
         }
     }

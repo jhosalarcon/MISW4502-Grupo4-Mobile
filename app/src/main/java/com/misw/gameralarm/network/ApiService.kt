@@ -1,5 +1,7 @@
 package com.misw.gameralarm.data.network
 
+import OrderRequest
+import OrderResponse
 import com.misw.gameralarm.data.model.ClienteResponse
 import com.misw.gameralarm.data.model.CrearCuentaRequest
 import com.misw.gameralarm.data.model.CrearCuentaResponse
@@ -28,6 +30,12 @@ interface ApiService {
     @GET("sales/sales")
     fun listarPedidos(): Call<List<PedidoResponse>>
 
+    @GET("sales/sales/client/{id}")
+    fun listarPedidosPorUsuario(@Path("id") id: Int): Call<List<OrderResponse>>
+
+    @GET("sales/sales/{id}")
+    fun listarProductosPorOrden(@Path("id") id: Int): Call<OrderResponse>
+
     @GET("inventary/products")
     fun obtenerProductos(@Header("Authorization") token: String): Call<List<NuevoProductoResponse>>
 
@@ -36,5 +44,8 @@ interface ApiService {
 
     @GET("/auth/clients/all")
     fun listarClientes(@Header("Authorization") token: String): Call<List<ClienteResponse>>
+
+    @POST("/sales/sales")
+    fun guardarPedido(@Header("Authorization") token: String, @Body request: OrderRequest): Call<Void>
 
 }

@@ -64,7 +64,6 @@ class AgregarItem : Fragment() {
 
 
         btnGuardar.setOnClickListener {
-            // No hacer POST, solo guardar el producto_id seleccionado
             productoSeleccionado?.producto_id?.let {
                 guardarProductIdEnPrefs(it)
                 showSuccessDialog("Producto seleccionado guardado correctamente")
@@ -146,6 +145,7 @@ class AgregarItem : Fragment() {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", Context.MODE_PRIVATE)
         val existingIds = sharedPref.getString("product_ids", "")
         val existingPrecios = sharedPref.getString("product_prices", "")
+        val existingCantidades = sharedPref.getString("product_quantities", "")
 
         val updatedIds = if (existingIds.isNullOrEmpty()) {
             productId.toString()
@@ -160,11 +160,21 @@ class AgregarItem : Fragment() {
             "$existingPrecios,$precioUnitario"
         }
 
+        val cantidadTexto = etCantidad.text.toString()
+        val cantidad = cantidadTexto.toIntOrNull() ?: 1
+        val updatedCantidades = if (existingCantidades.isNullOrEmpty()) {
+            cantidad.toString()
+        } else {
+            "$existingCantidades,$cantidad"
+        }
+
         with(sharedPref.edit()) {
             putString("product_ids", updatedIds)
             putString("product_prices", updatedPrecios)
+            putString("product_quantities", updatedCantidades)
             apply()
         }
     }
+
 
 }

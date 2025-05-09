@@ -28,6 +28,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_dashboard_to_rutas">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_home_to_crear_cuenta">
                     <value>
                       <LayoutPositions />
@@ -54,6 +59,18 @@
                     </value>
                   </entry>
                   <entry key="agregar_item">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="clientes">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -189,6 +206,18 @@
                           <Point>
                             <option name="x" value="256" />
                             <option name="y" value="368" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="rutas">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
                           </Point>
                         </option>
                       </LayoutPositions>

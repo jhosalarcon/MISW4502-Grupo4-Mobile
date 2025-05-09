@@ -5,7 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".MisPedidos">
+    tools:context=".DetallePedido">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Atrás"
+        android:src="@drawable/arrow_back_24px"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Contenedor blanco con padding menor -->
     <androidx.cardview.widget.CardView
@@ -48,9 +60,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="center"
-                    android:text="Mis pedidos"
+                    android:text="Detalle del pedido"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/orderNumberTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pedido"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <!-- Lista de pedidos -->
@@ -68,50 +89,34 @@
                         app:cardCornerRadius="12dp"
                         app:cardElevation="2dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_receipt" />
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingStart="12dp">
-
-                                <TextView
-                                    android:id="@+id/orderNumberTextView"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Order #456765"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="4 items"
-                                    android:textColor="#888888"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_arrow_right" />
-                        </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
+
+                <!-- Estado del Pedido -->
+                <TextView
+                    android:id="@+id/estadoPedidoTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Estado: PENDIENTE"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center" />
+
+                <!-- Total del Pedido -->
+                <TextView
+                    android:id="@+id/totalPedidoTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total: 13,250.99 COP"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
             </LinearLayout>
         </ScrollView>
     </androidx.cardview.widget.CardView>

@@ -46,7 +46,10 @@ class Login : Fragment() {
                         if (response.isSuccessful) {
                             val loginResponse = response.body()
                             loginResponse?.token?.let { token ->
-                                saveAuthToken(token) // <<--- Guarda el token aquí
+                                saveAuthToken(token)
+                            }
+                            loginResponse?.id?.let { id ->
+                                saveUserId(id.toString())
                             }
 
                             when (loginResponse?.rol) {
@@ -102,5 +105,10 @@ class Login : Fragment() {
     private fun saveAuthToken(token: String) {
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
         sharedPref.edit().putString("auth_token", token).apply()
+    }
+
+    private fun saveUserId(id: String) {
+        val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
+        sharedPref.edit().putString("user_id", id).apply()
     }
 }

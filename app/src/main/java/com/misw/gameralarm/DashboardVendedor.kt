@@ -46,7 +46,7 @@ class DashboardVendedor : Fragment() {
         }
 
         btnRutas.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboard_to_mis_pedidos)
+            findNavController().navigate(R.id.action_dashboard_to_rutas)
         }
 
         btnCrearPedido.setOnClickListener {

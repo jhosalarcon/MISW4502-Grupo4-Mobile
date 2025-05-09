@@ -59,6 +59,11 @@
         android:name="com.misw.gameralarm.MisClientes"
         tools:layout="@layout/fragment_mis_clientes" />
 
+    <fragment
+        android:id="@+id/rutas"
+        android:name="com.misw.gameralarm.Rutas"
+        tools:layout="@layout/fragment_ruta_visitas" />
+
     <action
         android:id="@+id/action_home_to_dashboard"
         app:destination="@id/dashboard" />
@@ -95,17 +100,20 @@
         android:id="@+id/action_dashboard_to_clientes"
         app:destination="@id/clientes" />
 
+    <action
+        android:id="@+id/action_dashboard_to_rutas"
+        app:destination="@id/rutas" />
+
+    <action
+        android:id="@+id/action_misPedidos_to_detallePedido"
+        app:destination="@id/detallePedido" />
+
     <fragment
         android:id="@+id/misPedidos"
         android:name="com.misw.gameralarm.MisPedidos"
         android:label="Mis Pedidos">
 
-        <action
-            android:id="@+id/action_misPedidos_to_detallePedido"
-            app:destination="@id/detallePedido" >
-            <argument
-                android:name="orderId"
-                app:argType="string" />
-        </action>
+
+
     </fragment>
 </navigation>

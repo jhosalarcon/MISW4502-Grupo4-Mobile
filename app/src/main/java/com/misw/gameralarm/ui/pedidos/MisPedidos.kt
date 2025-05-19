@@ -16,6 +16,7 @@ class MisPedidos : Fragment() {
 
     private lateinit var ordersList: LinearLayout
     private lateinit var sharedPref: android.content.SharedPreferences
+    private var token: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -33,6 +34,7 @@ class MisPedidos : Fragment() {
 
         val userId = sharedPref.getString("user_id", null)?.toIntOrNull()
         val userRole = sharedPref.getString("user_role", null)
+        token = sharedPref.getString("auth_token", null)
 
         if (userId == null || userRole == null) {
             showError("Datos de usuario incompletos")
@@ -46,8 +48,8 @@ class MisPedidos : Fragment() {
 
     private fun loadOrders(userId: Int, role: String) {
         val call = when (role) {
-            "CLIENTE" -> ApiClient.apiService.listarPedidosPorUsuario(userId)
-            else -> ApiClient.apiService.listarPedidosPorVendedor(userId)
+            "CLIENTE" -> ApiClient.apiService.listarPedidosPorUsuario("Bearer $token",userId)
+            else -> ApiClient.apiService.listarPedidosPorVendedor("Bearer $token",userId)
         }
 
         call.enqueue(object : Callback<List<OrderResponse>> {

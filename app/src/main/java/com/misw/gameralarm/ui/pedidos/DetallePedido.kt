@@ -21,6 +21,8 @@ import retrofit2.Response
 
 class DetallePedido : Fragment() {
 
+    private var token: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +38,7 @@ class DetallePedido : Fragment() {
         btnBack.setOnClickListener { findNavController().navigateUp() }
 
         val sharedPref = requireContext().getSharedPreferences("auth_prefs", 0)
+        token = sharedPref.getString("auth_token", null)
         val pedidoId = sharedPref.getString("pedido_id", null)
         val orderNumberTextView = view.findViewById<TextView>(R.id.orderNumberTextView)
         orderNumberTextView.text = "Pedido #$pedidoId"
@@ -46,7 +49,7 @@ class DetallePedido : Fragment() {
             return view
         }
 
-        ApiClient.apiService.listarProductosPorOrden(pedidoId.toInt()).enqueue(object : Callback<OrderResponse> {
+        ApiClient.apiService.listarProductosPorOrden("Bearer $token", pedidoId.toInt()).enqueue(object : Callback<OrderResponse> {
             override fun onResponse(call: Call<OrderResponse>, response: Response<OrderResponse>) {
                 if (response.isSuccessful) {
                     val pedido = response.body()

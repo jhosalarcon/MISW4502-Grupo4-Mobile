@@ -13,6 +13,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_dashboard_to_duckia">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_dashboard_to_mis_entregas">
                     <value>
                       <LayoutPositions />
@@ -99,18 +104,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="d">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="dashboard">
                     <value>
                       <LayoutPositions>
@@ -136,6 +129,18 @@
                     </value>
                   </entry>
                   <entry key="detallePedido">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="duckia">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
